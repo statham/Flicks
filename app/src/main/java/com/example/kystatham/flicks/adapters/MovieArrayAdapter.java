@@ -67,7 +67,11 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         } else {
             movieImage = movie.getBackdropPath();
         }
-        Picasso.with(getContext()).load(movieImage).into(viewHolder.image);
+        Picasso.with(getContext()).load(movieImage)
+                .fit().centerInside()
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder)
+                .into(viewHolder.image);
 
         return convertView;
     }

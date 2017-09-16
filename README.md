@@ -16,7 +16,7 @@ The following **required** functionality is completed:
 
 The following **optional** features are implemented:
 
-* [ ] Display a nice default [placeholder graphic](http://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#configuring-picasso) for each image during loading.
+* [X] Display a nice default [placeholder graphic](http://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#configuring-picasso) for each image during loading.
 
 The following **bonus** features are implemented:
 
@@ -38,7 +38,8 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://i.imgur.com/vBBrq2M.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/gDegnnA.gif' title='Video Walkthrough' width='' alt='Video Walkthrough Portrait' />
+<img src='https://i.imgur.com/g9jehES.gif' title='Video Walkthrough' width='' alt='Video Walkthrough Landscape' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
