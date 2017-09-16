@@ -1,6 +1,7 @@
 package com.example.kystatham.flicks.adapters;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -58,7 +59,15 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         viewHolder.image.setImageResource(0);
         viewHolder.title.setText(movie.getOriginalTitle());
         viewHolder.overview.setText(movie.getOverview());
-        Picasso.with(getContext()).load(movie.getPosterPath()).into(viewHolder.image);
+
+        int orientation = getContext().getResources().getConfiguration().orientation;
+        String movieImage;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            movieImage = movie.getPosterPath();
+        } else {
+            movieImage = movie.getBackdropPath();
+        }
+        Picasso.with(getContext()).load(movieImage).into(viewHolder.image);
 
         return convertView;
     }
