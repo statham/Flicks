@@ -27,10 +27,22 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         TextView title;
         TextView overview;
         ImageView image;
+        ImageView backdrop;
     }
 
     public MovieArrayAdapter(Context context, List<Movie> movies) {
-        super(context, android.R.layout.simple_list_item_1, movies);
+        super(context, 0, movies);
+    }
+
+    // Returns the number of types of Views that will be created by getView(int, View, ViewGroup)
+    @Override
+    public int getItemViewType(int position) {
+        return getItem(position).getPopularity().ordinal();
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return Movie.Popularity.values().length;
     }
 
     @Override
@@ -40,14 +52,17 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
         //check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; //view lookup cache stored in tag
+        int type = getItemViewType(position);
         if (convertView == null) {
             //if there's no view to reuse, inflate the new view for the row
+            convertView = getInflatedLayoutForType(type);
+
             viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.item_movie, parent, false);
             viewHolder.title = (TextView) convertView.findViewById(R.id.tvTitle);
             viewHolder.overview = (TextView) convertView.findViewById(R.id.tvOverview);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.ivMovieImage);
+            viewHolder.backdrop = (ImageView) convertView.findViewById(R.id.ivBackdrop);
+
             //cache the viewHolder object inside the fresh view
             convertView.setTag(viewHolder);
         } else {
@@ -56,23 +71,41 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         }
         //Populate the data from the data object via the viewHolder object
         //into the template view
-        viewHolder.image.setImageResource(0);
-        viewHolder.title.setText(movie.getOriginalTitle());
-        viewHolder.overview.setText(movie.getOverview());
-
-        int orientation = getContext().getResources().getConfiguration().orientation;
-        String movieImage;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            movieImage = movie.getPosterPath();
+        if(type == Movie.Popularity.UNPOPULAR.ordinal()) {
+            viewHolder.image.setImageResource(0);
+            viewHolder.title.setText(movie.getOriginalTitle());
+            viewHolder.overview.setText(movie.getOverview());
+            int orientation = getContext().getResources().getConfiguration().orientation;
+            String movieImage;
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                movieImage = movie.getPosterPath();
+            } else {
+                movieImage = movie.getBackdropPath();
+            }
+            Picasso.with(getContext()).load(movieImage)
+                    .fit().centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(viewHolder.image);
         } else {
-            movieImage = movie.getBackdropPath();
+            viewHolder.backdrop.setImageResource(0);
+            Picasso.with(getContext()).load(movie.getBackdropPath())
+                    .fit().centerInside()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .into(viewHolder.backdrop);
         }
-        Picasso.with(getContext()).load(movieImage)
-                .fit().centerInside()
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.placeholder)
-                .into(viewHolder.image);
 
         return convertView;
+    }
+
+    private View getInflatedLayoutForType(int type) {
+        if(type == Movie.Popularity.POPULAR.ordinal()) {
+            return LayoutInflater.from(getContext()).inflate(R.layout.item_popular_movie, null);
+        } else if (type == Movie.Popularity.UNPOPULAR.ordinal()) {
+            return LayoutInflater.from(getContext()).inflate(R.layout.item_movie, null);
+        } else {
+            return null;
+        }
     }
 }
