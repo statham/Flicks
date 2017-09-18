@@ -1,7 +1,10 @@
 package com.example.kystatham.flicks;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.kystatham.flicks.adapters.MovieArrayAdapter;
@@ -56,5 +59,25 @@ public class MovieActivity extends AppCompatActivity {
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
+        setupListViewClickListener();
+    }
+
+    public void setupListViewClickListener() {
+        lvItems.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapter, View item, int position, long id) {
+                        Intent intent = new Intent(MovieActivity.this, SingleMovie.class);
+                        intent.putExtra("position", position);
+                        Movie movie = movies.get(position);
+                        intent.putExtra("title", movie.getOriginalTitle());
+                        intent.putExtra("synopsis", movie.getOverview());
+                        intent.putExtra("backdropPath", movie.getBackdropPath());
+                        intent.putExtra("releaseDate", movie.getReleaseDate());
+                        intent.putExtra("voteAverage", movie.getVoteAverage());
+                        startActivity(intent);
+                    }
+                }
+        );
     }
 }

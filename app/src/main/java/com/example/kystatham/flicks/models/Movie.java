@@ -34,23 +34,30 @@ public class Movie {
 
     public Popularity getPopularity() { return popularity; }
 
+    public String getReleaseDate() { return releaseDate; }
+
+    public float getVoteAverage() { return voteAverage; }
+
     String posterPath;
     String backdropPath;
     String originalTitle;
     String overview;
     Popularity popularity;
+    String releaseDate;
+    float voteAverage;
 
     public Movie(JSONObject jsonObject) throws JSONException {
         this.posterPath = jsonObject.getString("poster_path");
         this.backdropPath = jsonObject.getString("backdrop_path");
         this.originalTitle = jsonObject.getString("original_title");
         this.overview = jsonObject.getString("overview");
-        Double voteAverage = jsonObject.getDouble("vote_average");
+        this.voteAverage = (float) jsonObject.getDouble("vote_average");
         if (voteAverage >= 5.0) {
             this.popularity = Popularity.POPULAR;
         } else {
             this.popularity = Popularity.UNPOPULAR;
         }
+        this.releaseDate = jsonObject.getString("release_date");
     }
 
     public static ArrayList<Movie> fromJSONArray(JSONArray array) {

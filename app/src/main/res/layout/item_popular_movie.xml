@@ -13,5 +13,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        tools:src="@drawable/placeholder" />
+        tools:src="@drawable/placeholder"
+        android:background="@color/colorPrimary"/>
 </RelativeLayout>
